@@ -1,0 +1,20 @@
+a = 0;
+b = 100;
+N = 10000;
+h = (b-a)/N;
+t = a:h:b;
+y = zeros(3, N+1);
+y(:,1) = [1; 1; 1]; 
+
+for n = 1:N
+    K1 = h*f(t(n),y(n));        
+     K2 = h* f(t(n)+h/2*0.5,y(n)+h*K1*0.5);
+     K3 = h*f(t(n)+h, y(n)-h*K1 +2*K2*h);
+y(n+1) =y(n)+h*(1/6)*(K1 +4*K2+K3);   
+ 
+%y(:,n+1) = y(:,n) + 1/6*(k1 + 4*k2 + k3);
+end
+
+pl = plot3(y(1,:),y(2,:), y(3,:));
+pl.set('linewidth', 2);
+grid on
