@@ -1,0 +1,18 @@
+%Parametrar. M = massa, G = gravitationskonstant
+M1 = 1;
+M2 = 2;
+M3 = 0.5;
+%G = 1; behövs inte eftersom den alltid är 1
+
+%Begynnelsevärden position
+P1 = [0 0 0]';
+P2 = [1 0 0]';
+P3 = [0 0 1]';
+
+%Begynnelsevärden hastighet
+p = 0.05;
+V1 = [p p p]';
+V2 = [-p p p]';
+V3 = [-p -p -p]';
+
+X0 = [P1 V1 P2 V2 P3 V3]';
