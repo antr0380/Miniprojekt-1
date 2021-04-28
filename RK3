@@ -1,3 +1,5 @@
+function Y = RK3
+
 a = 0;
 b = 1;
 N = 10000;
