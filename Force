@@ -1,0 +1,5 @@
+function F = Force(P,M,P1,M1,P2,M2)
+
+F = -M*M1*(P-P1)/norm(P-P1)^3-M*M2*(P-P2)/norm(P-P2)^3;
+
+end
