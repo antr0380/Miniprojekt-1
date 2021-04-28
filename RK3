@@ -1,4 +1,12 @@
-function Y = RK3
+function [t, y] = RK3(func, tspan, y0, h)
+
+y0 = y0(:); 
+t = (tspan(1):h:tspan(2))';
+h_i = h*ones(length(t),1);
+if t(end) ~= tspan(2)
+    h_i = [h_i; tspan(2)-t(end)];
+    t = [t; tspan(2)];
+end
 
 a = 0;
 b = 1;
@@ -6,7 +14,10 @@ N = 10000;
 h = (b-a)/N;
 t = a:h:b;
 y = zeros(3, N+1);
-y(:,1) = [1; 1; 1]; 
+y(:,1) = [1; 1; 1];
+
+y = zeros(length(y0),length(t)); 
+y(:,1) = y0;   
 
 for n = 1:N
     K1 = h*f(t(n),y(n));        
