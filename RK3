@@ -1,12 +1,4 @@
-function [t, y] = RK3(func, tspan, y0, h)
-
-y0 = y0(:); 
-t = (tspan(1):h:tspan(2))';
-h_i = h*ones(length(t),1);
-if t(end) ~= tspan(2)
-    h_i = [h_i; tspan(2)-t(end)];
-    t = [t; tspan(2)];
-end
+function [t, y] = RK3(func, t, X)
 
 a = 0;
 b = 1;
@@ -14,20 +6,13 @@ N = 10000;
 h = (b-a)/N;
 t = a:h:b;
 y = zeros(3, N+1);
-y(:,1) = [1; 1; 1];
-
-y = zeros(length(y0),length(t)); 
-y(:,1) = y0;   
+y(:,1) = [X(1); X(3); X(5)]; %begynnelsevärden
 
 for n = 1:N
-    K1 = h*f(t(n),y(n));        
-     K2 = h* f(t(n)+h/2*0.5,y(n)+h*K1*0.5);
-     K3 = h*f(t(n)+h, y(n)-h*K1 +2*K2*h);
+    K1 = h*func(t(n),y(n));        
+    K2 = h*func(t(n)+h/2*0.5,y(n)+h*K1*0.5);
+    K3 = h*func(t(n)+h, y(n)-h*K1 +2*K2*h);
 y(n+1) =y(n)+h*(1/6)*(K1 +4*K2+K3);   
  
 %y(:,n+1) = y(:,n) + 1/6*(k1 + 4*k2 + k3);
 end
-
-pl = plot3(y(1,:),y(2,:), y(3,:));
-pl.set('linewidth', 2);
-grid on
