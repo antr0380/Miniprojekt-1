@@ -1,18 +1,11 @@
-function [t, y] = RK3(func, t, X)
-
-a = 0;
-b = 1;
-N = 10000;
-h = (b-a)/N;
-t = a:h:b;
-y = zeros(3, N+1);
-y(:,1) = [X(1); X(3); X(5)]; %begynnelsevärden
+function [t, y] = RK3(func, t, N, h, X)
+y = zeros(6, N+1);
+y(:,1) = X(:,1); %begynnelsevärden
 
 for n = 1:N
-    K1 = h*func(t(n),y(n));        
-    K2 = h*func(t(n)+h/2*0.5,y(n)+h*K1*0.5);
-    K3 = h*func(t(n)+h, y(n)-h*K1 +2*K2*h);
-y(n+1) =y(n)+h*(1/6)*(K1 +4*K2+K3);   
+    K1 = h*func(t(n),y(:,n));        
+    K2 = h*func(t(n)+h/2*0.5,y(:,n)+h*K1*0.5);
+    K3 = h*func(t(n)+h, y(:,n)-h*K1 +2*K2*h);
+y(:,n+1) =y(:,n)+h*(1/6)*(K1+4*K2+K3);   
  
-%y(:,n+1) = y(:,n) + 1/6*(k1 + 4*k2 + k3);
 end
