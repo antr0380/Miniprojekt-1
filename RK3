@@ -1,11 +1,12 @@
 function [t, y] = RK3(func, t, N, h, X)
-y = zeros(6, N+1);
-y(:,1) = X(:,1); %begynnelsevärden
+
+y = zeros(18, N+1);
+y(:,1) = X; %begynnelsevärden läggs i första kolumnen
 
 for n = 1:N
-    K1 = h*func(t(n),y(:,n));        
-    K2 = h*func(t(n)+h/2*0.5,y(:,n)+h*K1*0.5);
+    K1 = h*func(t(n), y(:,n));        
+    K2 = h*func(t(n)+h/2*0.5, y(:,n)+h*K1*0.5);
     K3 = h*func(t(n)+h, y(:,n)-h*K1 +2*K2*h);
 y(:,n+1) =y(:,n)+h*(1/6)*(K1+4*K2+K3);   
- 
+
 end
