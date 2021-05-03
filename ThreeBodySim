@@ -1,8 +1,5 @@
-%Parametrar. M = massa, G = gravitationskonstant
-M1 = 1;
-M2 = 2;
-M3 = 0.5;
-%G = 1; behövs inte eftersom den alltid är 1
+%Lägg till beskrivning av programmet. Fixa rätt indentering. Beskriv varje
+%del av koden. 
 
 %Begynnelsevärden position
 P1 = [0 0 0]';
@@ -15,19 +12,32 @@ V1 = [p p p]';
 V2 = [-p p p]';
 V3 = [-p -p -p]';
 
-X0 = [P1 V1 P2 V2 P3 V3]';
+%Begynnelsevärdena läggs i en kolumnvektor. Bättre, smidigare att göra om dem till en vektor av kolumnvektorer istället för en gigantisk kolumnvektorer med lösa element?
+X0 = [P1; V1; P2; V2; P3; V3];
 
 %Skapar tidsvektor
 a = 0;
-b = 1;
-N = 100;
-h = (b-a)/N;
+b = 50;
+N = 1000; %hur ska man välja steglängd? och ska steglängden verkligen påverka resultatet så här mycket?
+h = (b-a)/N; 
 t = a:h:b;
 
-%Löser diffekvationen med runge-kutta, får ut position. men eftersom det är
-%en ODE av andra ordningen måste vi göra det två gånger? eller, vi måste
-%göra om problemet till ett system av första ordningens diffekvationer?
-[t, y] = RK3(@(t, X) RHS(t, X0), t, N, h, X0) %vi måste ge t som en vektor med alla tider
+%Löser systemet av differentialekvationer p'=v, v'=f/m med runge-kutta-3. Y är en vektor innehållande positioner och hastigheter för varje t. varför [t,y]?
+[t, y] = RK3(@RHS, t, N, h, X0); 
 
-% % Testar att kalla på force-funktionen
-% Force(P1, M1, P2, M2, P3, M3)
+%Löser systemet med matlabs inbyggda ekvationslösare. Ger en "exakt"
+%lösning. 
+[t, x] = ode45(@RHS ,[a b], X0)
+
+%Plottar positionerna i 3D över tid. Lägg positionerna i egna vektorer så
+%att det blir enklare och tydligare? Kropparna åker bort från varandra! borde dom inte dras till varandra
+%istället?
+pl_p = plot3(y(1,:),y(2,:),y(3,:),'bo',y(7,:),y(8,:),y(9,:),'ro',y(13,:),y(14,:),y(15,:),'ko');
+pl_p.set('linewidth', 2);
+xlabel('X-axis')
+ylabel('Y-axis')
+zlabel('Z-axis');
+title('Positions of the three balls');
+legend('Ball1','Ball2','Ball3');
+grid on
+
