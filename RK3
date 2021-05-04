@@ -1,12 +1,15 @@
+
 function [t, y] = RK3(func, t, N, h, X)
+% This function solves an ODE with the Runge-Kutta-3 method. 
+% X is a vector with the initial values and func is the right hand side function RHS. 
 
 y = zeros(18, N+1);
-y(:,1) = X; %begynnelsevärden läggs i första kolumnen
+y(:,1) = X; 
 
 for n = 1:N
     K1 = h*func(t(n), y(:,n));        
-    K2 = h*func(t(n)+h/2*0.5, y(:,n)+h*K1*0.5);
-    K3 = h*func(t(n)+h, y(:,n)-h*K1 +2*K2*h);
-y(:,n+1) =y(:,n)+h*(1/6)*(K1+4*K2+K3);   
+    K2 = h*func(t(n)+h/2, y(:,n)+K1/2);
+    K3 = h*func(t(n)+h, y(:,n)-K1 +2*K2);
+y(:,n+1) =y(:,n)+(1/6)*(K1+4*K2+K3);   
 
 end
