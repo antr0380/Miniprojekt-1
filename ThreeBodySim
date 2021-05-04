@@ -1,43 +1,68 @@
-%Lägg till beskrivning av programmet. Fixa rätt indentering. Beskriv varje
-%del av koden. 
+%This program simulates the positions of three bodies in
+%space over time. The positions are obtained by solving the system of first
+%order differential equations p'=v, v'=f/m using the numerical method Runge-Kutta-3 (RK3). 
+%The right hand side of the equation is defined in the function RHS. 
+%The force is computed with Newton's law of universal gravitation defined in the function Force.m. 
 
-%Begynnelsevärden position
+%Initial values for position
 P1 = [0 0 0]';
 P2 = [1 0 0]';
 P3 = [0 0 1]';
 
-%Begynnelsevärden hastighet
+%Initial values for velocity
 p = 0.05;
 V1 = [p p p]';
 V2 = [-p p p]';
 V3 = [-p -p -p]';
 
-%Begynnelsevärdena läggs i en kolumnvektor. Bättre, smidigare att göra om dem till en vektor av kolumnvektorer istället för en gigantisk kolumnvektorer med lösa element?
+%The initial values are put in a column vector
 X0 = [P1; V1; P2; V2; P3; V3];
 
-%Skapar tidsvektor
+%Creates time vector with the interval [a b] and step size h. 
 a = 0;
-b = 50;
-N = 1000; %hur ska man välja steglängd? och ska steglängden verkligen påverka resultatet så här mycket?
+b = 1;
+N = 100000; %Number of time steps
 h = (b-a)/N; 
 t = a:h:b;
 
-%Löser systemet av differentialekvationer p'=v, v'=f/m med runge-kutta-3. Y är en vektor innehållande positioner och hastigheter för varje t. varför [t,y]?
+%Solves the system of ODE:s with runge-kutta-3 (RK3). 
+%The result y is a vector containing positions and velocities for each time t. 
 [t, y] = RK3(@RHS, t, N, h, X0); 
 
-%Löser systemet med matlabs inbyggda ekvationslösare. Ger en "exakt"
-%lösning. 
-[t, x] = ode45(@RHS ,[a b], X0)
+%Solves the system with matlabs built-in differential equation solver.
+[t, x] = ode45(@RHS, [a b], X0);
+x=x';
 
-%Plottar positionerna i 3D över tid. Lägg positionerna i egna vektorer så
-%att det blir enklare och tydligare? Kropparna åker bort från varandra! borde dom inte dras till varandra
-%istället?
-pl_p = plot3(y(1,:),y(2,:),y(3,:),'bo',y(7,:),y(8,:),y(9,:),'ro',y(13,:),y(14,:),y(15,:),'ko');
-pl_p.set('linewidth', 2);
-xlabel('X-axis')
-ylabel('Y-axis')
+%Plots the positions of the bodies in 3D solved with RK3. 
+figure('Name','RK3','NumberTitle','off')
+pl_y = plot3(y(1,:),y(2,:),y(3,:),'bo',y(7,:),y(8,:),y(9,:),'ro',y(13,:),y(14,:),y(15,:),'ko');
+xlabel('X-axis');
+ylabel('Y-axis');
 zlabel('Z-axis');
-title('Positions of the three balls');
-legend('Ball1','Ball2','Ball3');
+title('RK3');
+legend('Body 1','Body 2','Body 3');
 grid on
+
+%Plots the positions of the bodies solved with ode45. 
+figure('Name','ode45','NumberTitle','off')
+pl_x = plot3(x(1,:),x(2,:),x(3,:),'bo',x(7,:),x(8,:),x(9,:),'ro',x(13,:),x(14,:),x(15,:),'ko');
+xlabel('X-axis');
+ylabel('Y-axis');
+zlabel('Z-axis');
+title('ode45');
+legend('Body 1','Body 2','Body3');
+grid on
+
+
+%Initial values for the trajectory in the plane
+% P1 = [-1 0 0]';
+% P2 = [1 0 0]';
+% P3 = [0 0 0]';
+% 
+% V1 = [0.3471168881 0.5327249454 0]';
+% V2 = [0.3471168881 0.5327249454 0]';
+% V3 = [-2*0.3471168881 -2*0.5327249454 0]';
+
+% b = 3*6.3259139829;
+
 
