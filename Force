@@ -1,4 +1,6 @@
 function F = Force(P,M,P1,M1,P2,M2)
+%Computes the force on the body with position P and mass M using Newton's
+%law of universal gravitation. 
 
 F = -M*M1*(P-P1)/norm(P-P1)^3-M*M2*(P-P2)/norm(P-P2)^3;
 
